@@ -1,7 +1,7 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { appendAnimes } from "../redux/animeReducer";
+import { getAllAnime } from "../redux/animeReducer";
 
 const Container = styled.div`
   background-color: black;
@@ -41,61 +41,66 @@ const Popularity = styled.span``;
 const Rating = styled.span``;
 const Voted = styled.span``;
 
-const Home = ({ isLoading, setPage }) => {
-  const { animeLists, pagination } = useSelector((state) => state.anime);
+const Home = () => {
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    dispatch(getAllAnime(page));
+  }, [dispatch, page]);
+
+  const { animeLists, pagination } = useSelector((state) => state.anime);
   const observer = useRef();
-  const lastElement = useCallback((node) => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && pagination.has_next_page) {
-        let page = pagination.current_page;
-        console.log(entries[0].isIntersecting);
-        setPage(++page);
-        // dispatch(appendAnimes());
-      }
-    });
 
-    if (node) observer.current.observe(node);
-  });
+  const lastElement = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && pagination.has_next_page) {
+            setTimeout(() => setPage((prev) => prev + 1));
+          }
+        },
+        { threshold: 0.2 }
+      );
 
-  console.log("from home", animeLists);
+      if (node) observer.current.observe(node);
+    },
+    [setPage, pagination]
+  );
+
   return (
     <Container>
       <Wrapper>
         <Cover></Cover>
         <AnimeLists>
-          {isLoading ? (
-            <span>Loading...</span>
-          ) : (
-            animeLists.map((anime, index) =>
-              animeLists.length === index + 1 ? (
-                <Anime key={anime.mal_id} ref={lastElement}>
-                  <ImageContainer image={anime.images.jpg.large_image_url}>
-                    <Top></Top>
-                    <Bottom>
-                      <Title></Title>
-                      <Genre></Genre>
-                      <Popularity></Popularity>
-                      <Rating></Rating>
-                      <Voted></Voted>
-                    </Bottom>
-                  </ImageContainer>
-                </Anime>
-              ) : (
-                <Anime key={anime.mal_id}>
-                  <ImageContainer image={anime.images.jpg.large_image_url}>
-                    <Top></Top>
-                    <Bottom>
-                      <Title></Title>
-                      <Genre></Genre>
-                      <Popularity></Popularity>
-                      <Rating></Rating>
-                      <Voted></Voted>
-                    </Bottom>
-                  </ImageContainer>
-                </Anime>
-              )
+          {animeLists.map((anime, index) =>
+            animeLists.length === index + 1 ? (
+              <Anime key={anime.mal_id} ref={lastElement}>
+                <ImageContainer image={anime.images.jpg.large_image_url}>
+                  <Top></Top>
+                  <Bottom>
+                    <Title></Title>
+                    <Genre></Genre>
+                    <Popularity></Popularity>
+                    <Rating></Rating>
+                    <Voted></Voted>
+                  </Bottom>
+                </ImageContainer>
+              </Anime>
+            ) : (
+              <Anime key={anime.mal_id}>
+                <ImageContainer image={anime.images.jpg.large_image_url}>
+                  <Top></Top>
+                  <Bottom>
+                    <Title></Title>
+                    <Genre></Genre>
+                    <Popularity></Popularity>
+                    <Rating></Rating>
+                    <Voted></Voted>
+                  </Bottom>
+                </ImageContainer>
+              </Anime>
             )
           )}
         </AnimeLists>
