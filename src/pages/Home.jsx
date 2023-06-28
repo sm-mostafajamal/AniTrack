@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { getAllAnime } from "../redux/animeReducer";
+import { getAllAnime, getUpcomingAnimeSeason } from "../redux/animeReducer";
+import UpcomingSeason from "../components/UpcomingSeason";
 
 const Container = styled.div`
-  background-color: black;
+  /* background-color: black; */
 `;
 const Wrapper = styled.div``;
-const Cover = styled.div``;
 const AnimeLists = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -44,36 +44,37 @@ const Voted = styled.span``;
 const Home = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-
   useEffect(() => {
     dispatch(getAllAnime(page));
+    dispatch(getUpcomingAnimeSeason());
+
   }, [dispatch, page]);
 
   const { animeLists, pagination } = useSelector((state) => state.anime);
-  const observer = useRef();
+  // const observer = useRef();
 
-  const lastElement = useCallback(
-    (node) => {
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && pagination.has_next_page) {
-            setTimeout(() => setPage((prev) => prev + 1));
-          }
-        },
-        { threshold: 0.2 }
-      );
+  // const lastElement = useCallback(
+  //   (node) => {
+  //     if (observer.current) observer.current.disconnect();
+  //     observer.current = new IntersectionObserver(
+  //       (entries) => {
+  //         if (entries[0].isIntersecting && pagination.has_next_page) {
+  //           setTimeout(() => setPage((prev) => prev + 1));
+  //         }
+  //       },
+  //       { threshold: 0.2 }
+  //     );
 
-      if (node) observer.current.observe(node);
-    },
-    [setPage, pagination]
-  );
+  //     if (node) observer.current.observe(node);
+  //   },
+  //   [setPage, pagination]
+  // );
 
   return (
     <Container>
       <Wrapper>
-        <Cover></Cover>
-        <AnimeLists>
+          <UpcomingSeason />
+        {/* <AnimeLists>
           {animeLists.map((anime, index) =>
             animeLists.length === index + 1 ? (
               <Anime key={anime.mal_id} ref={lastElement}>
@@ -103,7 +104,7 @@ const Home = () => {
               </Anime>
             )
           )}
-        </AnimeLists>
+        </AnimeLists> */}
       </Wrapper>
     </Container>
   );
