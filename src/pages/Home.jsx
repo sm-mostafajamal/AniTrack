@@ -7,6 +7,11 @@ import UpcomingSeason from "../components/UpcomingSeason";
 const Container = styled.div`
   /* background-color: black; */
 `;
+const Cover = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 const Wrapper = styled.div``;
 const AnimeLists = styled.div`
   display: flex;
@@ -73,7 +78,9 @@ const Home = () => {
   return (
     <Container>
       <Wrapper>
+      <Cover>
           <UpcomingSeason />
+      </Cover>
         {/* <AnimeLists>
           {animeLists.map((anime, index) =>
             animeLists.length === index + 1 ? (
