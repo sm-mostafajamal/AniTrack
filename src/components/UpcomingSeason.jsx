@@ -2,8 +2,10 @@ import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
+import ShowMore from "./ShowMore";
 
-const Container = styled.div`
+const Container = styled.div``;
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   position: relative;
@@ -18,7 +20,7 @@ const Arrow = styled.div`
   right: ${(props) => props.direction === "right" && "10px"};
   cursor: pointer;
 `;
-const Wrapper = styled.div`
+const SliderContainer = styled.div`
   width: 100%;
   display: flex;
   transition: 1s all ease;
@@ -73,36 +75,40 @@ const UpcomingSeason = () => {
 
   return (
     <Container>
-      <Arrow direction="left" onClick={() => handleClick("left")}>
-        <ArrowBackIos />
-      </Arrow>
-      <Wrapper slideindex={slideIndex}>
-        {animeLists.upcoming.map((anime) => (
-          <Slider key={anime.mal_id}>
-            <AnimeImageContainer>
-              <Image src={anime.images.jpg.large_image_url} />
-            </AnimeImageContainer>
-            <AnimeInfoContainer>
-              <Title>
-                {anime.title_english ? anime.title_english : anime.title}
-              </Title>
-              <Detail>Genres: {}</Detail>
-              <Detail>Release Date: {anime.aired.string}</Detail>
-              <Detail>Boradcast Time: {anime.broadcast.string}</Detail>
-              <Detail>Popularity: {anime.popularity}</Detail>
-              <Detail>Favorites: {anime.favorites}</Detail>
-              <Detail>
-                <VideoLink href={anime.trailer.embed_url} target="_blank">
-                  Watch the trailer
-                </VideoLink>
-              </Detail>
-            </AnimeInfoContainer>
-          </Slider>
-        ))}
-      </Wrapper>
-      <Arrow direction="right" onClick={() => handleClick("right")}>
-        <ArrowForwardIos />
-      </Arrow>
+      <ShowMore>
+        <Wrapper>
+          <Arrow direction="left" onClick={() => handleClick("left")}>
+            <ArrowBackIos />
+          </Arrow>
+          <SliderContainer slideindex={slideIndex}>
+            {animeLists.upcoming.map((anime) => (
+              <Slider key={anime.mal_id}>
+                <AnimeImageContainer>
+                  <Image src={anime.images.jpg.large_image_url} />
+                </AnimeImageContainer>
+                <AnimeInfoContainer>
+                  <Title>
+                    {anime.title_english ? anime.title_english : anime.title}
+                  </Title>
+                  <Detail>Genres: {}</Detail>
+                  <Detail>Release Date: {anime.aired.string}</Detail>
+                  <Detail>Boradcast Time: {anime.broadcast.string}</Detail>
+                  <Detail>Popularity: {anime.popularity}</Detail>
+                  <Detail>Favorites: {anime.favorites}</Detail>
+                  <Detail>
+                    <VideoLink href={anime.trailer.embed_url} target="_blank">
+                      Watch the trailer
+                    </VideoLink>
+                  </Detail>
+                </AnimeInfoContainer>
+              </Slider>
+            ))}
+          </SliderContainer>
+          <Arrow direction="right" onClick={() => handleClick("right")}>
+            <ArrowForwardIos />
+          </Arrow>
+        </Wrapper>
+      </ShowMore>
     </Container>
   );
 };

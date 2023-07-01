@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAll, getUpcomingSeason } from "../services/animeService";
+import { getAnime } from "../services/animeService";
 import { batch } from "react-redux";
 
 const animeSlice = createSlice({
@@ -8,32 +8,37 @@ const animeSlice = createSlice({
     animeLists: {
       animes: [],
       upcoming: [],
+      top: [],
     },
     pagination: null,
   },
   reducers: {
     appendAnimes(state, action) {
-      if (action.payload.type === "animes") {
-        return {
-          ...state,
-          animeLists: {
-            ...state.animeLists,
-            animes: state.animeLists.animes.concat(
-              ...action.payload.payloadFromServer.data
-            ),
-          },
-        };
-      } else if (action.payload.type === "upcomingSeason") {
-        return {
-          ...state,
-          animeLists: {
-            ...state.animeLists,
-            upcoming: state.animeLists.upcoming.concat(
-              ...action.payload.payloadFromServer.data
-            ),
-          },
-        };
-      }
+      return {
+        ...state,
+        animeLists: {
+          ...state.animeLists,
+          animes: state.animeLists.animes.concat(...action.payload),
+        },
+      };
+    },
+    appendUpcomingAnimes: (state, action) => {
+      return {
+        ...state,
+        animeLists: {
+          ...state.animeLists,
+          upcoming: state.animeLists.upcoming.concat(...action.payload),
+        },
+      };
+    },
+    appendTopAnimes: (state, action) => {
+      return {
+        ...state,
+        animeLists: {
+          ...state.animeLists,
+          top: state.animeLists.top.concat(...action.payload),
+        },
+      };
     },
     appendPagination(state, action) {
       return {
@@ -44,40 +49,26 @@ const animeSlice = createSlice({
   },
 });
 
-export const { appendAnimes, appendPagination } = animeSlice.actions;
+export const {
+  appendAnimes,
+  appendUpcomingAnimes,
+  appendTopAnimes,
+  appendPagination,
+} = animeSlice.actions;
 
-export const getAllAnime = (page) => {
+export const getAllAnime = (page = 1) => {
   return async (dispatch) => {
-    const animes = await getAll(page);
-    const upcomingSeason = await getUpcomingSeason();
+    const animes = await getAnime("anime", page);
+    const upcomingSeason = await getAnime("seasons/upcoming", page);
+    const topAnimes = await getAnime("top/anime", page);
+
     batch(() => {
-      dispatch(
-        appendAnimes({
-          type: "animes",
-          payloadFromServer: animes,
-        })
-      );
-      dispatch(
-        appendAnimes({
-          type: "upcomingSeason",
-          payloadFromServer: upcomingSeason,
-        })
-      );
+      dispatch(appendAnimes(animes.data));
+      dispatch(appendUpcomingAnimes(upcomingSeason.data));
+      dispatch(appendTopAnimes(topAnimes.data));
     });
     // dispatch(appendPagination(animes.pagination.has_next_page));
   };
 };
-
-// export const getUpcomingAnimeSeason = () => {
-//   return async (dispatch) => {
-//     const upcomingSeason = await getUpcomingSeason();
-//     dispatch(
-//       appendAnimes({
-//         type: "upcomingSeason",
-//         payloadFromServer: upcomingSeason,
-//       })
-//     );
-//   };
-// };
 
 export default animeSlice.reducer;

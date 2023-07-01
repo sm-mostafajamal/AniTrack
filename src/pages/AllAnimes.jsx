@@ -36,11 +36,12 @@ const Genre = styled.span``;
 const Popularity = styled.span``;
 const Rating = styled.span``;
 const Voted = styled.span``;
-const Animes = () => {
-  const { animeLists, pagination } = useSelector((state) => state.anime);
-  const dispatch = useDispatch();
-  const observer = useRef();
+const AllAnimes = () => {
+  const [page, setPage] = useState(1);
 
+  const { animeLists, pagination } = useSelector((state) => state.anime);
+  const observer = useRef();
+  console.log(animeLists);
   const lastElement = useCallback(
     (node) => {
       if (observer.current) observer.current.disconnect();
@@ -61,7 +62,7 @@ const Animes = () => {
   return (
     <Container>
       <AnimeLists>
-        {animeLists.map((anime, index) =>
+        {animeLists.animes.map((anime, index) =>
           animeLists.length === index + 1 ? (
             <Anime key={anime.mal_id} ref={lastElement}>
               <ImageContainer image={anime.images.jpg.large_image_url}>
@@ -95,4 +96,4 @@ const Animes = () => {
   );
 };
 
-export default Animes;
+export default AllAnimes;
