@@ -5,36 +5,40 @@ const animeSlice = createSlice({
   name: "anime",
   initialState: {
     animeLists: {
-      upcoming: []
+      animes: [],
+      upcoming: [],
     },
     pagination: null,
   },
   reducers: {
     appendAnimes(state, action) {
-
-      if(action.payload.type === "upcomingSeason") {
+      if (action.payload.type === "animes") {
         return {
-        ...state,
-        animeLists: {
-          ...state.animeLists,
-          upcoming: state.animeLists.upcoming.concat(...action.payload.payloadFromServer.data)
-        }
+          ...state,
+          animeLists: {
+            ...state.animeLists,
+            animes: state.animeLists.animes.concat(
+              ...action.payload.payloadFromServer.data
+            ),
+          },
+        };
+      } else if (action.payload.type === "upcomingSeason") {
+        return {
+          ...state,
+          animeLists: {
+            ...state.animeLists,
+            upcoming: state.animeLists.upcoming.concat(
+              ...action.payload.payloadFromServer.data
+            ),
+          },
+        };
       }
-    }
-    // else if() {
-        
-    // }  
-    
-      // return {
-      //   ...state,
-      //   animeLists: state.animeLists.concat(...action.payload),
-      // };
     },
     appendPagination(state, action) {
       return {
         ...state,
-        pagination: action.payload
-      }
+        pagination: action.payload,
+      };
     },
   },
 });
@@ -44,7 +48,13 @@ export const { appendAnimes, appendPagination } = animeSlice.actions;
 export const getAllAnime = (page) => {
   return async (dispatch) => {
     const animes = await getAll(page);
-    dispatch(appendAnimes(animes.data));
+
+    dispatch(
+      appendAnimes({
+        type: "animes",
+        payloadFromServer: animes,
+      })
+    );
     // dispatch(appendPagination(animes.pagination.has_next_page));
   };
 };
@@ -52,7 +62,12 @@ export const getAllAnime = (page) => {
 export const getUpcomingAnimeSeason = () => {
   return async (dispatch) => {
     const upcomingSeason = await getUpcomingSeason();
-    dispatch(appendAnimes({type:"upcomingSeason", payloadFromServer: upcomingSeason}))
+    dispatch(
+      appendAnimes({
+        type: "upcomingSeason",
+        payloadFromServer: upcomingSeason,
+      })
+    );
   };
 };
 

@@ -47,15 +47,15 @@ const Rating = styled.span``;
 const Voted = styled.span``;
 
 const Home = () => {
+  const { animeLists, pagination } = useSelector((state) => state.anime);
   const dispatch = useDispatch();
+
   const [page, setPage] = useState(1);
   useEffect(() => {
     dispatch(getAllAnime(page));
     dispatch(getUpcomingAnimeSeason());
-
   }, [dispatch, page]);
-
-  const { animeLists, pagination } = useSelector((state) => state.anime);
+  console.log("first");
   // const observer = useRef();
 
   // const lastElement = useCallback(
@@ -78,9 +78,9 @@ const Home = () => {
   return (
     <Container>
       <Wrapper>
-      <Cover>
+        <Cover>
           <UpcomingSeason />
-      </Cover>
+        </Cover>
         {/* <AnimeLists>
           {animeLists.map((anime, index) =>
             animeLists.length === index + 1 ? (
