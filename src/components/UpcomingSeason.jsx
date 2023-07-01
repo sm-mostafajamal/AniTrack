@@ -1,5 +1,5 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 
@@ -8,7 +8,7 @@ const Container = styled.div`
   align-items: center;
   position: relative;
   overflow: hidden;
-  background-color: black;
+  /* background-color: black; */
   color: white;
 `;
 const Arrow = styled.div`
@@ -48,20 +48,14 @@ const Title = styled.h1`
   letter-spacing: 4px;
   font-weight: 500;
 `;
-const EngTitle = styled.span`
-  font-size: 20px;
-`;
 const Detail = styled.p``;
 const VideoLink = styled.a``;
 
 const UpcomingSeason = () => {
   const { animeLists } = useSelector((state) => state.anime);
   const [slideIndex, setSlideIndex] = useState(0);
-  const [slideAuto, setSlideAuto] = useState(true);
 
   const handleClick = (direction) => {
-    if (direction === "left" || direction === "right") setSlideAuto(false);
-
     if (direction === "left") {
       return setSlideIndex((prev) =>
         slideIndex > 0 ? prev - 1 : animeLists.upcoming.length - 1
@@ -76,16 +70,6 @@ const UpcomingSeason = () => {
       );
     }
   };
-  // if (slideAuto) {
-  //   setTimeout(() => handleClick("auto"), 1000);
-  //   console.log(slideAuto);
-  // } else {
-  //   setTimeout(() => setSlideAuto(!slideAuto), 3000);
-  // }
-
-  // useEffect(() => {
-
-  // }, [slideAuto]);
 
   return (
     <Container>
