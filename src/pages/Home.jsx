@@ -6,6 +6,7 @@ import UpcomingSeason from "../components/UpcomingSeason";
 import Navbar from "../components/Navbar";
 import Animes from "../components/Animes";
 import TopLists from "../components/TopLists";
+import Footer from "../components/Footer";
 
 const Container = styled.div`
   background-color: black;
@@ -34,9 +35,25 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllAnime());
+    const urls = {
+      allAnime: {
+        url: "anime",
+        query: [{ status: "airing" }],
+      },
+      upcoming: {
+        url: "seasons/upcoming",
+        query: [{ limit: 10 }],
+      },
+      top: {
+        url: "top/anime",
+        query: [{ filter: "airing" }],
+      },
+    };
+    for (const url in urls) {
+      dispatch(getAllAnime({ type: url, queries: urls[url] }));
+    }
   }, [dispatch]);
-  console.log("first");
+
   return (
     <Container>
       <Wrapper>
@@ -48,10 +65,10 @@ const Home = () => {
             <Animes />
           </All>
           <Top>
-            <Title>Top Animes</Title>
             <TopLists />
           </Top>
         </AnimeContainer>
+        <Footer />
       </Wrapper>
     </Container>
   );

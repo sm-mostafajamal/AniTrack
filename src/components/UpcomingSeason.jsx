@@ -54,34 +54,42 @@ const Detail = styled.p``;
 const VideoLink = styled.a``;
 
 const UpcomingSeason = () => {
-  const { animeLists } = useSelector((state) => state.anime);
+  const { upcoming } = useSelector((state) => state.anime.animeLists);
+
   const [slideIndex, setSlideIndex] = useState(0);
 
+  // const [autoSlide, setAutoSlide] = useState(true);
+  // if (autoSlide) {
+  // console.log(autoSlide);
+  //   setTimeout(() => handleClick("auto"), 2000);
+  // }
+
   const handleClick = (direction) => {
+    // if (direction === "left" || direction === "right") setAutoSlide(false);
     if (direction === "left") {
       return setSlideIndex((prev) =>
-        slideIndex > 0 ? prev - 1 : animeLists.upcoming.length - 1
+        slideIndex > 0 ? prev - 1 : upcoming.length - 1
       );
     } else if (direction === "right") {
       return setSlideIndex((prev) =>
-        slideIndex < animeLists.upcoming.length - 1 ? prev + 1 : 0
+        slideIndex < upcoming.length - 1 ? prev + 1 : 0
       );
     } else {
       return setSlideIndex((prev) =>
-        slideIndex < animeLists.upcoming.length - 1 ? prev + 1 : 0
+        slideIndex < upcoming.length - 1 ? prev + 1 : 0
       );
     }
   };
 
   return (
     <Container>
-      <ShowMore>
+      <ShowMore title={"Upcoming popular Anime Seasons"}>
         <Wrapper>
           <Arrow direction="left" onClick={() => handleClick("left")}>
             <ArrowBackIos />
           </Arrow>
           <SliderContainer slideindex={slideIndex}>
-            {animeLists.upcoming.map((anime) => (
+            {upcoming.map((anime) => (
               <Slider key={anime.mal_id}>
                 <AnimeImageContainer>
                   <Image src={anime.images.jpg.large_image_url} />

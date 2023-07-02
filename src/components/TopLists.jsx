@@ -1,46 +1,81 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
+import ShowMore from "./ShowMore";
 const Container = styled.div`
   color: white;
 `;
 const AnimeLists = styled.div``;
 const Anime = styled.div`
   display: flex;
+  padding-bottom: 10px;
+  width: 100%;
 `;
-const Image = styled.img``;
-const Left = styled.div``;
+const Left = styled.div`
+  width: 40%;
+  display: flex;
+  padding-right: 10px;
+`;
+const Numbering = styled.span`
+  font-size: 30px;
+  width: 20%;
+  padding-right: 10px;
+`;
+const Image = styled.img`
+  width: 70%;
+`;
 const Rank = styled.span``;
 const Right = styled.div`
+  width: 60%;
+
   display: flex;
   flex-direction: column;
 `;
-const Title = styled.span``;
+const Title = styled.span`
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  line-height: 16px;
+  padding-bottom: 5px;
+`;
+const Details = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  color: #a8a3a3;
+`;
 const Episodes = styled.span``;
 const Status = styled.span``;
 const Score = styled.span``;
 
 const TopLists = () => {
   const { top } = useSelector(({ anime }) => anime.animeLists);
-  const showHomePageAnime = top.slice(0, 8);
+  const showHomePageAnime = top.slice(0, 10);
   return (
     <Container>
-      <AnimeLists>
-        {showHomePageAnime.map((anime) => (
-          <Anime key={anime.mal_id}>
-            <Left>
-              <Rank>{anime.rank}</Rank>
-              <Image src={anime.images.jpg.small_image_url} />
-            </Left>
-            <Right>
-              <Title>{anime.title}</Title>
-              <Episodes>{anime.episodes}</Episodes>
-              <Status>{anime.status}</Status>
-              <Score>{anime.score}</Score>
-            </Right>
-          </Anime>
-        ))}
-      </AnimeLists>
+      <ShowMore title="Top Animes" position="top">
+        <AnimeLists>
+          {showHomePageAnime.map((anime, i) => (
+            <Anime key={anime.mal_id}>
+              <Left>
+                <Numbering>{i + 1}</Numbering>
+                <Image src={anime.images.jpg.large_image_url} />
+              </Left>
+              <Right>
+                <Title>{anime.title}</Title>
+                <Details>
+                  <Episodes>
+                    {anime.episodes && `Episodes Released: ${anime.episodes}`}
+                  </Episodes>
+                  <Status>{anime.status}</Status>
+                  <Score>Score: {anime.score}</Score>
+                  <Rank>Rank: {anime.rank}</Rank>
+                </Details>
+              </Right>
+            </Anime>
+          ))}
+        </AnimeLists>
+      </ShowMore>
     </Container>
   );
 };

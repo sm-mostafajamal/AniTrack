@@ -2,16 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getAnime } from "../services/animeService";
 import { batch } from "react-redux";
 
+const initialState = {
+  animeLists: {
+    animes: [],
+    upcoming: [],
+    top: [],
+  },
+  // pagination: null,
+};
+
 const animeSlice = createSlice({
   name: "anime",
-  initialState: {
-    animeLists: {
-      animes: [],
-      upcoming: [],
-      top: [],
-    },
-    pagination: null,
-  },
+  initialState,
   reducers: {
     appendAnimes(state, action) {
       return {
@@ -56,16 +58,14 @@ export const {
   appendPagination,
 } = animeSlice.actions;
 
-export const getAllAnime = (page = 1) => {
+export const getAllAnime = (data) => {
   return async (dispatch) => {
-    const animes = await getAnime("anime", page);
-    const upcomingSeason = await getAnime("seasons/upcoming", page);
-    const topAnimes = await getAnime("top/anime", page);
-
+    const animes = await getAnime(data.queries.url, ...data.queries.query);
+    // console.log(animes);
     batch(() => {
-      dispatch(appendAnimes(animes.data));
-      dispatch(appendUpcomingAnimes(upcomingSeason.data));
-      dispatch(appendTopAnimes(topAnimes.data));
+      if (data.type === "allAnime") dispatch(appendAnimes(animes.data));
+      if (data.type === "upcoming") dispatch(appendUpcomingAnimes(animes.data));
+      if (data.type === "top") dispatch(appendTopAnimes(animes.data));
     });
     // dispatch(appendPagination(animes.pagination.has_next_page));
   };

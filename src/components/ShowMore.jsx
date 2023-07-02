@@ -1,29 +1,55 @@
+import { DoubleArrow } from "@mui/icons-material";
 import React from "react";
 import { styled } from "styled-components";
 const Container = styled.div`
   position: relative;
 `;
-const More = styled.p`
+const Wrapper = styled.div``;
+
+const Title = styled.p`
   z-index: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  position: absolute;
+  /* position: absolute; */
   color: white;
   height: 40px;
   font-size: 18px;
   font-weight: 500;
   letter-spacing: 1px;
-  padding-left: 10px;
-  background-color: #26262666;
+  background-color: #5e5e5e66;
   cursor: pointer;
 `;
-
+const Icon = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 const ShowMore = (props) => {
   return (
     <Container>
-      <More>Show More</More>
-      {props.children}
+      {props.position === "top" ? (
+        <Wrapper>
+          <Title style={{ justifyContent: "start" }}>
+            {props.title}
+            <Icon>
+              <DoubleArrow />
+            </Icon>
+          </Title>
+          {props.children}
+        </Wrapper>
+      ) : (
+        <Wrapper>
+          {props.children}
+          <Title>
+            {props.title}
+            <Icon>
+              <DoubleArrow />
+            </Icon>
+          </Title>
+        </Wrapper>
+      )}
     </Container>
   );
 };
