@@ -4,11 +4,11 @@ import { batch } from "react-redux";
 
 const initialState = {
   animeLists: {
-    animes: [],
+    allAnimes: [],
     upcoming: [],
     top: [],
   },
-  // pagination: null,
+  hasPage: null,
 };
 
 const animeSlice = createSlice({
@@ -20,7 +20,7 @@ const animeSlice = createSlice({
         ...state,
         animeLists: {
           ...state.animeLists,
-          animes: state.animeLists.animes.concat(...action.payload),
+          allAnimes: state.animeLists.allAnimes.concat(...action.payload),
         },
       };
     },
@@ -45,7 +45,7 @@ const animeSlice = createSlice({
     appendPagination(state, action) {
       return {
         ...state,
-        pagination: action.payload,
+        hasPage: action.payload,
       };
     },
   },
@@ -58,16 +58,20 @@ export const {
   appendPagination,
 } = animeSlice.actions;
 
-export const getAllAnime = (data) => {
+export const getAllAnime = (filter) => {
   return async (dispatch) => {
-    const animes = await getAnime(data.queries.url, ...data.queries.query);
-    // console.log(animes);
-    batch(() => {
-      if (data.type === "allAnime") dispatch(appendAnimes(animes.data));
-      if (data.type === "upcoming") dispatch(appendUpcomingAnimes(animes.data));
-      if (data.type === "top") dispatch(appendTopAnimes(animes.data));
-    });
-    // dispatch(appendPagination(animes.pagination.has_next_page));
+    // console.log(filter.queries);
+    const animes = await getAnime(filter.url, { ...filter.queries });
+    // batch(() => {
+    if (filter.type === "allAnimes") {
+      dispatch(appendAnimes(animes.data));
+      dispatch(appendPagination(animes.pagination.has_next_page));
+    } else if (filter.type === "upcoming") {
+      dispatch(appendUpcomingAnimes(animes.data));
+    } else if (filter.type === "top") {
+      dispatch(appendTopAnimes(animes.data));
+    }
+    // });
   };
 };
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { getAllAnime } from "../redux/animeReducer";
 import Anime from "../components/Anime";
@@ -38,27 +38,41 @@ const Wrapper = styled.div`
 const AnimeWrapper = styled.div``;
 
 const AllAnimes = () => {
-  const { animes } = useSelector((state) => state.anime.animeLists);
+  const [animes, hasPage, allAnime] = useSelector(
+    ({ anime, filter }) => [
+      anime.animeLists.allAnimes,
+      anime.hasPage,
+      filter.allAnimes,
+    ],
+    shallowEqual
+  );
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const observer = useRef();
-  const lastElement = useCallback((node) => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setTimeout(() => setPage((prev) => prev + 1), 0);
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, []);
+  const lastElement = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasPage) {
+          setTimeout(() => setPage((prev) => prev + 1), 0);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [hasPage]
+  );
+  console.log(page);
 
+  // custom hook
   useEffect(() => {
-    const allAnime = {
-      url: "anime",
-      query: [{ status: "airing", page: page }],
-    };
-    dispatch(getAllAnime({ type: "allAnime", queries: allAnime }));
-  }, [dispatch, page]);
+    dispatch(
+      getAllAnime({
+        type: "allAnimes",
+        ...allAnime,
+        queries: { ...allAnime.queries[0], page: page },
+      })
+    );
+  }, [dispatch, allAnime, page]);
 
   const handleSelect = () => {
     console.log("selected");
@@ -67,23 +81,23 @@ const AllAnimes = () => {
     <Container>
       <Navbar />
       <FilterContainer onChange={handleSelect}>
-        <Select name="anime">
-          <Option>Anime</Option>
-          <Option value="tv">TV</Option>
-          <Option value="movie">Movie</Option>
-          <Option value="ova">Ova</Option>
-          <Option value="special">Special</Option>
-          <Option value="ona">Ona</Option>
+        <Select name="type">
+          <Option value="">Select Type</Option>
+          <Option value="tv">TV Series</Option>
+          <Option value="movie">Movies</Option>
+          <Option value="ova">OVAs</Option>
+          <Option value="special">Specials</Option>
+          <Option value="ona">ONAs</Option>
           <Option value="music">Music</Option>
         </Select>
         <Select name="status">
-          <Option>Anime Status</Option>
+          <Option value="">Select Status</Option>
           <Option value="airing">Airing</Option>
           <Option value="complete">Complete</Option>
           <Option value="upcoming">Upcoming</Option>
         </Select>
-        <Select name="anime_type">
-          <Option>Anime Type</Option>
+        <Select name="rating">
+          <Option value="g">Select Rating</Option>
           <Option value="g">All Ages</Option>
           <Option value="pg">Children</Option>
           <Option value="pg13">Teens 13 or Older</Option>

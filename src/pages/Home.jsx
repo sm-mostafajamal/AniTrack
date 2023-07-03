@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { getAllAnime } from "../redux/animeReducer";
 import UpcomingSeason from "../components/UpcomingSeason";
@@ -33,26 +33,18 @@ const Top = styled.div`
 
 const Home = () => {
   const dispatch = useDispatch();
+  const filtersData = useSelector(({ filter }) => filter);
 
   useEffect(() => {
-    const urls = {
-      allAnime: {
-        url: "anime",
-        query: [{ status: "airing" }],
-      },
-      upcoming: {
-        url: "seasons/upcoming",
-        query: [{ limit: 10 }],
-      },
-      top: {
-        url: "top/anime",
-        query: [{ filter: "airing" }],
-      },
-    };
-    for (const url in urls) {
-      dispatch(getAllAnime({ type: url, queries: urls[url] }));
+    for (const filterData in filtersData) {
+      dispatch(
+        getAllAnime({
+          type: filterData,
+          ...filtersData[filterData],
+        })
+      );
     }
-  }, [dispatch]);
+  }, [dispatch, filtersData]);
 
   return (
     <Container>

@@ -13,8 +13,8 @@ const AnimeLists = styled.div`
 `;
 
 const Animes = () => {
-  const { animes } = useSelector(({ anime }) => anime.animeLists);
-  const showHomePageAnime = animes.slice(0, 25);
+  const { allAnimes } = useSelector(({ anime }) => anime.animeLists);
+  const showHomePageAnime = allAnimes.slice(0, 25);
   return (
     <Container>
       <ShowMore title="Show All Animes">
