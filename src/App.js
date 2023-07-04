@@ -9,7 +9,7 @@ function App() {
   const [page, setPage] = useState({ pageName: "", num: 1 });
   const dispatch = useDispatch();
   const filtersData = useSelector(({ filter }) => filter);
-  // console.log(page.pageName);
+
   useEffect(() => {
     for (const filterData in filtersData) {
       if (filterData === page.pageName || page.num === 1) {

@@ -37,16 +37,13 @@ const Wrapper = styled.div`
 const AnimeWrapper = styled.div``;
 
 const AllAnimes = ({ setPage }) => {
-  const [animes, hasPage] = useSelector(
-    ({ anime, filter }) => [anime.animeLists.allAnimes, anime.hasPage],
-    shallowEqual
-  );
+  const animes = useSelector(({ anime }) => anime);
   const observer = useRef();
   const lastElement = useCallback(
     (node) => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasPage) {
+        if (entries[0].isIntersecting && animes.hasPage) {
           setTimeout(
             () =>
               setPage((prev) => {
@@ -58,7 +55,7 @@ const AllAnimes = ({ setPage }) => {
       });
       if (node) observer.current.observe(node);
     },
-    [hasPage, setPage]
+    [animes, setPage]
   );
 
   const handleSelect = () => {
@@ -95,8 +92,8 @@ const AllAnimes = ({ setPage }) => {
       </FilterContainer>
 
       <Wrapper>
-        {animes.map((anime, index) =>
-          animes.length === index + 1 ? (
+        {animes.animeLists.allAnimes.map((anime, index) =>
+          animes.animeLists.allAnimes.length === index + 1 ? (
             <AnimeWrapper key={anime.mal_id} ref={lastElement}>
               <Anime anime={anime} />
             </AnimeWrapper>

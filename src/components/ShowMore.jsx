@@ -21,6 +21,7 @@ const Title = styled(Link)`
   letter-spacing: 1px;
   background-color: #5e5e5e66;
   cursor: pointer;
+  text-decoration: none;
 `;
 const Icon = styled.span`
   display: flex;

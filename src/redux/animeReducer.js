@@ -9,6 +9,7 @@ const initialState = {
     top: [],
   },
   hasPage: null,
+  isLoading: true,
 };
 
 const animeSlice = createSlice({
@@ -22,6 +23,7 @@ const animeSlice = createSlice({
           ...state.animeLists,
           allAnimes: state.animeLists.allAnimes.concat(...action.payload),
         },
+        isLoading: false,
       };
     },
     appendUpcomingAnimes: (state, action) => {
