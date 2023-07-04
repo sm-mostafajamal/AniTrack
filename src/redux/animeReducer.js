@@ -33,6 +33,7 @@ const animeSlice = createSlice({
           ...state.animeLists,
           upcoming: state.animeLists.upcoming.concat(...action.payload),
         },
+        isLoading: false,
       };
     },
     appendTopAnimes: (state, action) => {
@@ -42,7 +43,19 @@ const animeSlice = createSlice({
           ...state.animeLists,
           top: state.animeLists.top.concat(...action.payload),
         },
+        isLoading: false,
       };
+    },
+    emptyAnimes: (state, action) => {
+      if (action.payload === "allAnimes") {
+        return {
+          ...state,
+          animeLists: {
+            ...state.animeLists,
+            allAnimes: [],
+          },
+        };
+      }
     },
     appendPagination(state, action) {
       return {
@@ -57,6 +70,7 @@ export const {
   appendAnimes,
   appendUpcomingAnimes,
   appendTopAnimes,
+  emptyAnimes,
   appendPagination,
 } = animeSlice.actions;
 

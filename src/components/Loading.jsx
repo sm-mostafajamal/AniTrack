@@ -1,16 +1,22 @@
 import React from "react";
 import { styled } from "styled-components";
-
-const Container = styled.div``;
+import logo from "../assets/loading/loading.gif";
+const Container = styled.div`
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const Gif = styled.img`
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
 `;
 
 const Loading = () => {
   return (
     <Container>
-      <Gif src="../assets/loading/pacman.gif" />
+      <Gif src={logo} alt="wait until the page loads" />
     </Container>
   );
 };

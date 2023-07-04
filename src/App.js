@@ -6,13 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllAnime } from "./redux/animeReducer";
 
 function App() {
-  const [page, setPage] = useState({ pageName: "", num: 1 });
+  const [page, setPage] = useState({ pageName: "home", num: 1 });
   const dispatch = useDispatch();
   const filtersData = useSelector(({ filter }) => filter);
 
   useEffect(() => {
     for (const filterData in filtersData) {
-      if (filterData === page.pageName || page.num === 1) {
+      if (
+        filtersData[filterData].name === page.pageName ||
+        page.pageName === "home"
+      ) {
         dispatch(
           getAllAnime(
             {

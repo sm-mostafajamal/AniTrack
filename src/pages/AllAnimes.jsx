@@ -1,9 +1,11 @@
 import React, { useCallback, useRef } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { styled } from "styled-components";
 import Anime from "../components/Anime";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { filterAllAnime } from "../redux/filterReducer";
+import { emptyAnimes } from "../redux/animeReducer";
 
 const Container = styled.div`
   background-color: black;
@@ -38,6 +40,7 @@ const AnimeWrapper = styled.div``;
 
 const AllAnimes = ({ setPage }) => {
   const animes = useSelector(({ anime }) => anime);
+  const dispatch = useDispatch();
   const observer = useRef();
   const lastElement = useCallback(
     (node) => {
@@ -57,16 +60,19 @@ const AllAnimes = ({ setPage }) => {
     },
     [animes, setPage]
   );
-
-  const handleSelect = () => {
-    console.log("selected");
+  const handleSelect = (e) => {
+    setPage((prev) => {
+      return { ...prev, pageName: "allAnimes", num: 1 };
+    });
+    dispatch(filterAllAnime({ [e.target.name]: e.target.value }));
+    dispatch(emptyAnimes("allAnimes"));
   };
   return (
     <Container>
       <Navbar />
-      <FilterContainer onChange={handleSelect}>
+      <FilterContainer onChange={(e) => handleSelect(e)}>
         <Select name="type">
-          <Option value="">Select Type</Option>
+          <Option style={{ display: "none" }}>Select Type</Option>
           <Option value="tv">TV Series</Option>
           <Option value="movie">Movies</Option>
           <Option value="ova">OVAs</Option>
@@ -75,13 +81,13 @@ const AllAnimes = ({ setPage }) => {
           <Option value="music">Music</Option>
         </Select>
         <Select name="status">
-          <Option value="">Select Status</Option>
-          <Option value="airing">Airing</Option>
+          <Option style={{ display: "none" }}>Select Status</Option>
           <Option value="complete">Complete</Option>
+          <Option value="airing">Airing</Option>
           <Option value="upcoming">Upcoming</Option>
         </Select>
         <Select name="rating">
-          <Option value="g">Select Rating</Option>
+          <Option style={{ display: "none" }}>Select Rating</Option>
           <Option value="g">All Ages</Option>
           <Option value="pg">Children</Option>
           <Option value="pg13">Teens 13 or Older</Option>

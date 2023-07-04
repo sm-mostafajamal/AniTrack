@@ -2,16 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   allAnimes: {
+    name: "allAnimes",
     url: "anime",
-    queries: { type: "tv", status: "complete", rating: "pg13", page: 1 },
+    queries: {},
   },
   upcoming: {
+    name: "upcoming",
     url: "seasons/upcoming",
-    queries: { filter: "tv", limit: 10 },
+    queries: { limit: 10 },
   },
   top: {
+    name: "top",
     url: "top/anime",
-    queries: { type: "tv", filter: "airing", rating: "g" },
+    queries: { type: "tv", filter: "airing", limit: 10, rating: "g" },
   },
 };
 
@@ -20,7 +23,16 @@ const filterSlice = createSlice({
   initialState,
   reducers: {
     filterAllAnime: (state, action) => {
-      return action.payload;
+      return {
+        ...state,
+        allAnimes: {
+          ...state.allAnimes,
+          queries: {
+            ...state.allAnimes.queries,
+            ...action.payload,
+          },
+        },
+      };
     },
   },
 });

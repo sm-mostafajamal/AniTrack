@@ -14,14 +14,12 @@ const AnimeLists = styled.div`
 `;
 
 const Animes = () => {
-  const { allAnimes } = useSelector(({ anime }) => anime.animeLists);
-  const { isLoading } = useSelector(({ anime }) => anime);
-  console.log(isLoading);
-  const showHomePageAnime = allAnimes.slice(0, 25);
+  const animes = useSelector(({ anime }) => anime);
+  const showHomePageAnime = animes.animeLists.allAnimes.slice(0, 25);
   return (
     <Container>
       <ShowMore title="Show All Animes" link="/animes">
-        {isLoading ? (
+        {animes.isLoading ? (
           <Loading />
         ) : (
           <AnimeLists>
