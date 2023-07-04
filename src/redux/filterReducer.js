@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   allAnimes: {
     url: "anime",
-    queries: { type: "tv", status: "airing", rating: "pg13", page: 1 },
+    queries: { type: "tv", status: "complete", rating: "pg13", page: 1 },
   },
   upcoming: {
     url: "seasons/upcoming",

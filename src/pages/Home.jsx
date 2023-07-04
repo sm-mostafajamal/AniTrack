@@ -1,7 +1,4 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { getAllAnime } from "../redux/animeReducer";
 import UpcomingSeason from "../components/UpcomingSeason";
 import Navbar from "../components/Navbar";
 import Animes from "../components/Animes";
@@ -32,20 +29,6 @@ const Top = styled.div`
 `;
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const filtersData = useSelector(({ filter }) => filter);
-
-  useEffect(() => {
-    for (const filterData in filtersData) {
-      dispatch(
-        getAllAnime({
-          type: filterData,
-          ...filtersData[filterData],
-        })
-      );
-    }
-  }, [dispatch, filtersData]);
-
   return (
     <Container>
       <Wrapper>

@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import React, { useCallback, useRef } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import { styled } from "styled-components";
-import { getAllAnime } from "../redux/animeReducer";
 import Anime from "../components/Anime";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -32,47 +31,35 @@ const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 20px;
 `;
 const AnimeWrapper = styled.div``;
 
-const AllAnimes = () => {
-  const [animes, hasPage, allAnime] = useSelector(
-    ({ anime, filter }) => [
-      anime.animeLists.allAnimes,
-      anime.hasPage,
-      filter.allAnimes,
-    ],
+const AllAnimes = ({ setPage }) => {
+  const [animes, hasPage] = useSelector(
+    ({ anime, filter }) => [anime.animeLists.allAnimes, anime.hasPage],
     shallowEqual
   );
-  const [page, setPage] = useState(1);
-  const dispatch = useDispatch();
   const observer = useRef();
   const lastElement = useCallback(
     (node) => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasPage) {
-          setTimeout(() => setPage((prev) => prev + 1), 0);
+          setTimeout(
+            () =>
+              setPage((prev) => {
+                return { ...prev, pageName: "allAnimes", num: prev.num + 1 };
+              }),
+            0
+          );
         }
       });
       if (node) observer.current.observe(node);
     },
-    [hasPage]
+    [hasPage, setPage]
   );
-  console.log(page);
-
-  // custom hook
-  useEffect(() => {
-    dispatch(
-      getAllAnime({
-        type: "allAnimes",
-        ...allAnime,
-        queries: { ...allAnime.queries[0], page: page },
-      })
-    );
-  }, [dispatch, allAnime, page]);
 
   const handleSelect = () => {
     console.log("selected");

@@ -58,20 +58,24 @@ export const {
   appendPagination,
 } = animeSlice.actions;
 
-export const getAllAnime = (filter) => {
+export const getAllAnime = (filter, page) => {
   return async (dispatch) => {
-    // console.log(filter.queries);
-    const animes = await getAnime(filter.url, { ...filter.queries });
-    // batch(() => {
-    if (filter.type === "allAnimes") {
-      dispatch(appendAnimes(animes.data));
-      dispatch(appendPagination(animes.pagination.has_next_page));
-    } else if (filter.type === "upcoming") {
-      dispatch(appendUpcomingAnimes(animes.data));
-    } else if (filter.type === "top") {
-      dispatch(appendTopAnimes(animes.data));
-    }
-    // });
+    const animes = await getAnime(filter.url, {
+      ...filter.queries,
+      page: page,
+    });
+    batch(() => {
+      if (filter.type === "allAnimes") {
+        dispatch(appendAnimes(animes.data));
+        dispatch(appendPagination(animes.pagination.has_next_page));
+      } else if (filter.type === "upcoming") {
+        dispatch(appendUpcomingAnimes(animes.data));
+        dispatch(appendPagination(animes.pagination.has_next_page));
+      } else if (filter.type === "top") {
+        dispatch(appendTopAnimes(animes.data));
+        dispatch(appendPagination(animes.pagination.has_next_page));
+      }
+    });
   };
 };
 

@@ -1,12 +1,13 @@
 import { DoubleArrow } from "@mui/icons-material";
 import React from "react";
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 const Container = styled.div`
   position: relative;
 `;
 const Wrapper = styled.div``;
 
-const Title = styled.p`
+const Title = styled(Link)`
   z-index: 1;
   display: flex;
   align-items: center;
@@ -31,7 +32,7 @@ const ShowMore = (props) => {
     <Container>
       {props.position === "top" ? (
         <Wrapper>
-          <Title style={{ justifyContent: "start" }}>
+          <Title style={{ justifyContent: "start" }} to={props.link}>
             {props.title}
             <Icon>
               <DoubleArrow />
@@ -42,7 +43,7 @@ const ShowMore = (props) => {
       ) : (
         <Wrapper>
           {props.children}
-          <Title>
+          <Title to={props.link}>
             {props.title}
             <Icon>
               <DoubleArrow />
