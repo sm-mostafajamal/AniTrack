@@ -4,12 +4,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAnime } from "./redux/animeReducer";
+import TopAnimes from "./pages/TopAnimes";
+import UpcomingPopularAnimes from "./pages/UpcomingPopularAnimes";
 
 function App() {
   const [page, setPage] = useState({ pageName: "home", num: 1 });
   const dispatch = useDispatch();
   const filtersData = useSelector(({ filter }) => filter);
-
   useEffect(() => {
     for (const filterData in filtersData) {
       if (
@@ -32,8 +33,15 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index path="/" element={<Home />} />
-        <Route path="/animes" element={<AllAnimes setPage={setPage} />} />
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="animes" element={<AllAnimes setPage={setPage} />} />
+          <Route path="top-animes" element={<TopAnimes setPage={setPage} />} />
+          <Route
+            path="upcoming-animes"
+            element={<UpcomingPopularAnimes setPage={setPage} />}
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

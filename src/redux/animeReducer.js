@@ -55,6 +55,23 @@ const animeSlice = createSlice({
             allAnimes: [],
           },
         };
+      } else if (action.payload === "top") {
+        // have to change it in switch
+        return {
+          ...state,
+          animeLists: {
+            ...state.animeLists,
+            top: [],
+          },
+        };
+      } else if (action.payload === "upcoming") {
+        return {
+          ...state,
+          animeLists: {
+            ...state.animeLists,
+            upcoming: [],
+          },
+        };
       }
     },
     appendPagination(state, action) {
@@ -80,18 +97,17 @@ export const getAllAnime = (filter, page) => {
       ...filter.queries,
       page: page,
     });
-    batch(() => {
-      if (filter.type === "allAnimes") {
-        dispatch(appendAnimes(animes.data));
-        dispatch(appendPagination(animes.pagination.has_next_page));
-      } else if (filter.type === "upcoming") {
-        dispatch(appendUpcomingAnimes(animes.data));
-        dispatch(appendPagination(animes.pagination.has_next_page));
-      } else if (filter.type === "top") {
-        dispatch(appendTopAnimes(animes.data));
-        dispatch(appendPagination(animes.pagination.has_next_page));
-      }
-    });
+    // switch
+    if (filter.type === "allAnimes") {
+      dispatch(appendAnimes(animes.data));
+      dispatch(appendPagination(animes.pagination.has_next_page));
+    } else if (filter.type === "upcoming") {
+      dispatch(appendUpcomingAnimes(animes.data));
+      dispatch(appendPagination(animes.pagination.has_next_page));
+    } else if (filter.type === "top") {
+      dispatch(appendTopAnimes(animes.data));
+      dispatch(appendPagination(animes.pagination.has_next_page));
+    }
   };
 };
 

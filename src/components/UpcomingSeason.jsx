@@ -83,7 +83,10 @@ const UpcomingSeason = () => {
 
   return (
     <Container>
-      <ShowMore title={"Upcoming popular Anime Seasons"}>
+      <ShowMore
+        title={"Upcoming & Now Releasing Popular Anime Seasons"}
+        link="/upcoming-animes"
+      >
         <Wrapper>
           <Arrow direction="left" onClick={() => handleClick("left")}>
             <ArrowBackIos />

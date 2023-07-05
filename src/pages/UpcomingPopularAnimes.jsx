@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import Anime from "../components/Anime";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { filterTopAnime } from "../redux/filterReducer";
+import { filterUpcomingAnime } from "../redux/filterReducer";
 import { emptyAnimes } from "../redux/animeReducer";
 
 const Container = styled.div`
@@ -37,7 +37,8 @@ const Wrapper = styled.div`
   padding: 20px;
 `;
 const AnimeWrapper = styled.div``;
-const TopAnimes = ({ setPage }) => {
+
+const UpcomingPopularAnimes = ({ setPage }) => {
   const animes = useSelector(({ anime }) => anime);
   const dispatch = useDispatch();
   const observer = useRef();
@@ -50,7 +51,7 @@ const TopAnimes = ({ setPage }) => {
           setTimeout(
             () =>
               setPage((prev) => {
-                return { ...prev, pageName: "top", num: prev.num + 1 };
+                return { ...prev, pageName: "upcoming", num: prev.num + 1 };
               }),
             0
           );
@@ -62,16 +63,16 @@ const TopAnimes = ({ setPage }) => {
   );
   const handleSelect = (e) => {
     setPage((prev) => {
-      return { ...prev, pageName: "top", num: 1 };
+      return { ...prev, pageName: "upcoming", num: 1 };
     });
-    dispatch(filterTopAnime({ [e.target.name]: e.target.value }));
-    dispatch(emptyAnimes("top"));
+    dispatch(filterUpcomingAnime({ [e.target.name]: e.target.value }));
+    dispatch(emptyAnimes("upcoming"));
   };
   return (
     <Container>
       <Navbar />
       <FilterContainer onChange={(e) => handleSelect(e)}>
-        <Select name="type">
+        <Select name="filter">
           <Option style={{ display: "none" }}>Select Type</Option>
           <Option value="tv">TV Series</Option>
           <Option value="movie">Movies</Option>
@@ -80,27 +81,11 @@ const TopAnimes = ({ setPage }) => {
           <Option value="ona">ONAs</Option>
           <Option value="music">Music</Option>
         </Select>
-        <Select name="filter">
-          <Option style={{ display: "none" }}>Select Status</Option>
-          <Option value="airing">Airing</Option>
-          <Option value="upcoming">Upcoming</Option>
-          <Option value="bypopularity">By Popularity</Option>
-          <Option value="favorite">Favorite</Option>
-        </Select>
-        <Select name="rating">
-          <Option style={{ display: "none" }}>Select Rating</Option>
-          <Option value="g">All Ages</Option>
-          <Option value="pg">Children</Option>
-          <Option value="pg13">Teens 13 or Older</Option>
-          <Option value="r17">17+ (violence & profanity)</Option>
-          <Option value="r">Mild Nudity</Option>
-          <Option value="rx">Hentai</Option>
-        </Select>
       </FilterContainer>
 
       <Wrapper>
-        {animes.animeLists.top.map((anime, index) =>
-          animes.animeLists.top.length === index + 1 ? (
+        {animes.animeLists.upcoming.map((anime, index) =>
+          animes.animeLists.upcoming.length === index + 1 ? (
             <AnimeWrapper key={anime.mal_id} ref={lastElement}>
               <Anime anime={anime} />
             </AnimeWrapper>
@@ -114,4 +99,4 @@ const TopAnimes = ({ setPage }) => {
   );
 };
 
-export default TopAnimes;
+export default UpcomingPopularAnimes;

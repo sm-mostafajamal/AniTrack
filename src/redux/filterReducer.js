@@ -8,13 +8,13 @@ const initialState = {
   },
   upcoming: {
     name: "upcoming",
-    url: "seasons/upcoming",
-    queries: { limit: 10 },
+    url: "seasons/now",
+    queries: {},
   },
   top: {
     name: "top",
     url: "top/anime",
-    queries: { type: "tv", filter: "airing", limit: 10, rating: "g" },
+    queries: { type: "tv", filter: "airing", rating: "pg13" },
   },
 };
 
@@ -34,9 +34,34 @@ const filterSlice = createSlice({
         },
       };
     },
+    filterUpcomingAnime: (state, action) => {
+      return {
+        ...state,
+        upcoming: {
+          ...state.upcoming,
+          queries: {
+            ...state.upcoming.queries,
+            ...action.payload,
+          },
+        },
+      };
+    },
+    filterTopAnime: (state, action) => {
+      return {
+        ...state,
+        top: {
+          ...state.top,
+          queries: {
+            ...state.top.queries,
+            ...action.payload,
+          },
+        },
+      };
+    },
   },
 });
 
-export const { filterAllAnime } = filterSlice.actions;
+export const { filterAllAnime, filterUpcomingAnime, filterTopAnime } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

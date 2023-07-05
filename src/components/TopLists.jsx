@@ -54,7 +54,7 @@ const TopLists = () => {
   const showHomePageAnime = animes.animeLists.top.slice(0, 10);
   return (
     <Container>
-      <ShowMore title="Top Animes" position="top">
+      <ShowMore title="Top Animes" link="/top-animes" position="top">
         {animes.isLoading ? (
           <Loading />
         ) : (
