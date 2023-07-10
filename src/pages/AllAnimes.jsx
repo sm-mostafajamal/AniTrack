@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { filterAllAnime } from "../redux/filterReducer";
 import { emptyAnimes } from "../redux/animeReducer";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   background-color: black;
@@ -37,7 +38,10 @@ const Wrapper = styled.div`
   padding: 20px;
 `;
 const AnimeWrapper = styled.div``;
-
+const AnimeLink = styled(Link)`
+  text-decoration: none;
+  width: 15%;
+`;
 const AllAnimes = ({ setPage }) => {
   const animes = useSelector(({ anime }) => anime);
   const dispatch = useDispatch();
@@ -100,11 +104,17 @@ const AllAnimes = ({ setPage }) => {
       <Wrapper>
         {animes.animeLists.allAnimes.map((anime, index) =>
           animes.animeLists.allAnimes.length === index + 1 ? (
-            <AnimeWrapper key={anime.mal_id} ref={lastElement}>
+            <AnimeLink
+              to={`/anime/${anime.mal_id}`}
+              key={anime.mal_id}
+              ref={lastElement}
+            >
               <Anime anime={anime} />
-            </AnimeWrapper>
+            </AnimeLink>
           ) : (
-            <Anime key={anime.mal_id} anime={anime} />
+            <AnimeLink to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
+              <Anime anime={anime} />
+            </AnimeLink>
           )
         )}
       </Wrapper>

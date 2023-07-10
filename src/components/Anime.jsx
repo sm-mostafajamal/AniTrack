@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  width: 15%;
+  width: 100%;
   height: 250px;
   gap: 10px;
   cursor: pointer;
@@ -32,12 +33,12 @@ const Title = styled.span`
   color: #c3cdd5;
 `;
 
-const Details = styled.div`
+const DetailContainer = styled.div`
   top: 0;
   left: 120px;
+  position: absolute;
   width: 250px;
   height: 120px;
-  /* background-color: #242424c9; */
   background-color: black;
   color: white;
   box-shadow: 0px 0px 14px 8px rgba(255, 255, 255, 0.19);
@@ -47,15 +48,28 @@ const Details = styled.div`
   flex-direction: column;
   border-radius: 5px;
   margin-top: 15px;
-  position: absolute;
+  padding: 15px;
   z-index: 1;
-  padding-left: 20px;
-  padding-top: 20px;
 `;
-const Genre = styled.span``;
-const Popularity = styled.span``;
-const Rating = styled.span``;
-const Voted = styled.span``;
+const GenreContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const Genre = styled.span`
+  background-color: #5a2e98;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+`;
+const Detail = styled.span`
+  font-size: 13px;
+  letter-spacing: 1px;
+`;
 
 const Anime = ({ anime }) => {
   const [show, setShow] = useState(false);
@@ -66,19 +80,23 @@ const Anime = ({ anime }) => {
   const handleLeave = () => {
     setShow(false);
   };
+  // console.log(anime);
   return (
     <Container onMouseOver={handleHover} onMouseLeave={handleLeave}>
       <Wrapper>
         <ImageContainer image={anime.images.jpg.large_image_url} />
         <Title>{anime.title}</Title>
       </Wrapper>
-      <Details style={show ? { display: "" } : { display: "none" }}>
-        <Genre>Action</Genre>
-        <Popularity>{anime.popularity}</Popularity>
-        <Rating>{anime.rating}</Rating>
-        <Voted>{anime.score}</Voted>
-        <Voted>{anime.rank}</Voted>
-      </Details>
+      <DetailContainer style={show ? { display: "" } : { display: "none" }}>
+        <GenreContainer>
+          {anime.genres.map((genre) => (
+            <Genre>{genre.name}</Genre>
+          ))}
+        </GenreContainer>
+        <Detail>Popularity: {anime.popularity}</Detail>
+        <Detail>Score: {anime.score}</Detail>
+        <Detail>Rank: {anime.rank}</Detail>
+      </DetailContainer>
     </Container>
   );
 };

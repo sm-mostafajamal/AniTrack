@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 import ShowMore from "./ShowMore";
 import Anime from "./Anime";
 import Loading from "./Loading";
+import { Link } from "react-router-dom";
 
 const Container = styled.div``;
 const AnimeLists = styled.div`
@@ -12,10 +13,14 @@ const AnimeLists = styled.div`
   gap: 10px;
   justify-content: space-between;
 `;
+const AnimeLink = styled(Link)`
+  text-decoration: none;
+  width: 15%;
+`;
 
 const Animes = () => {
   const animes = useSelector(({ anime }) => anime);
-  const showHomePageAnime = animes.animeLists.allAnimes.slice(0, 25);
+  const showHomePageAnime = animes.animeLists.allAnimes.slice(0, 24);
   return (
     <Container>
       <ShowMore title="Show All Animes" link="/animes">
@@ -24,7 +29,9 @@ const Animes = () => {
         ) : (
           <AnimeLists>
             {showHomePageAnime.map((anime) => (
-              <Anime key={anime.mal_id} anime={anime} />
+              <AnimeLink to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
+                <Anime anime={anime} />
+              </AnimeLink>
             ))}
           </AnimeLists>
         )}

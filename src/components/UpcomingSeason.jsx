@@ -1,4 +1,4 @@
-import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos, Launch } from "@mui/icons-material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
@@ -51,8 +51,31 @@ const Title = styled.h1`
   letter-spacing: 4px;
   font-weight: 500;
 `;
+const GenreContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const Genre = styled.span`
+  background-color: #5a2e98;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+`;
 const Detail = styled.p``;
-const VideoLink = styled.a``;
+const VideoLink = styled.a`
+  text-decoration: none;
+  color: #07d9d9;
+  display: flex;
+  align-items: center;
+  &:hover {
+    color: #1bfdfd;
+  }
+`;
 
 const UpcomingSeason = () => {
   const animes = useSelector(({ anime }) => anime);
@@ -80,7 +103,6 @@ const UpcomingSeason = () => {
       );
     }
   };
-
   return (
     <Container>
       <ShowMore
@@ -104,7 +126,11 @@ const UpcomingSeason = () => {
                     <Title>
                       {anime.title_english ? anime.title_english : anime.title}
                     </Title>
-                    <Detail>Genres: {}</Detail>
+                    <GenreContainer>
+                      {anime.genres.map((genre) => (
+                        <Genre>{genre.name}</Genre>
+                      ))}
+                    </GenreContainer>
                     <Detail>Release Date: {anime.aired.string}</Detail>
                     <Detail>Boradcast Time: {anime.broadcast.string}</Detail>
                     <Detail>Popularity: {anime.popularity}</Detail>
@@ -112,6 +138,7 @@ const UpcomingSeason = () => {
                     <Detail>
                       <VideoLink href={anime.trailer.embed_url} target="_blank">
                         Watch the trailer
+                        <Launch style={{ marginLeft: "5px" }} />
                       </VideoLink>
                     </Detail>
                   </AnimeInfoContainer>
