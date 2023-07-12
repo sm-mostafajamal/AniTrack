@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
+import { getSingleAnime } from "../redux/animeReducer";
 
 const Container = styled.div`
   display: flex;
@@ -80,7 +82,7 @@ const Anime = ({ anime }) => {
   const handleLeave = () => {
     setShow(false);
   };
-  // console.log(anime);
+
   return (
     <Container onMouseOver={handleHover} onMouseLeave={handleLeave}>
       <Wrapper>
@@ -90,7 +92,7 @@ const Anime = ({ anime }) => {
       <DetailContainer style={show ? { display: "" } : { display: "none" }}>
         <GenreContainer>
           {anime.genres.map((genre) => (
-            <Genre>{genre.name}</Genre>
+            <Genre key={genre.mal_id}>{genre.name}</Genre>
           ))}
         </GenreContainer>
         <Detail>Popularity: {anime.popularity}</Detail>

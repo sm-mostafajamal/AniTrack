@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getAnime } from "../services/animeService";
-import { batch } from "react-redux";
 
 const initialState = {
   animeLists: {
     allAnimes: [],
     upcoming: [],
     top: [],
+    anime: [],
   },
   hasPage: null,
   isLoading: true,
@@ -45,6 +45,9 @@ const animeSlice = createSlice({
         },
         isLoading: false,
       };
+    },
+    appendSelectedSingleAnime: (state, action) => {
+      state.animeLists.anime = action.payload;
     },
     emptyAnimes: (state, action) => {
       if (action.payload === "allAnimes") {
@@ -87,6 +90,7 @@ export const {
   appendAnimes,
   appendUpcomingAnimes,
   appendTopAnimes,
+  appendSelectedSingleAnime,
   emptyAnimes,
   appendPagination,
 } = animeSlice.actions;
@@ -110,5 +114,10 @@ export const getAllAnime = (filter, page) => {
     }
   };
 };
-
+export const getSingleAnime = (url) => {
+  return async (dispatch) => {
+    const anime = await getAnime(url);
+    return dispatch(appendSelectedSingleAnime(anime.data));
+  };
+};
 export default animeSlice.reducer;

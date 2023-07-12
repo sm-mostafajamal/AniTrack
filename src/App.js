@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllAnime } from "./redux/animeReducer";
 import TopAnimes from "./pages/TopAnimes";
 import UpcomingPopularAnimes from "./pages/UpcomingPopularAnimes";
-import Anime from "./pages/Anime";
+import AnimeDetails from "./pages/AnimeDetails";
 
 function App() {
   const [page, setPage] = useState({ pageName: "home", num: 1 });
@@ -42,7 +42,7 @@ function App() {
             path="upcoming-animes"
             element={<UpcomingPopularAnimes setPage={setPage} />}
           />
-          <Route path="anime/:id" element={<Anime />} />
+          <Route path="anime/:id" element={<AnimeDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

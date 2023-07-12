@@ -117,7 +117,7 @@ const UpcomingSeason = () => {
             <Loading />
           ) : (
             <SliderContainer slideindex={slideIndex}>
-              {animes.animeLists.upcoming.map((anime) => (
+              {animes.animeLists.upcoming.map((anime, id) => (
                 <Slider key={anime.mal_id}>
                   <AnimeImageContainer>
                     <Image src={anime.images.jpg.large_image_url} />
@@ -128,7 +128,7 @@ const UpcomingSeason = () => {
                     </Title>
                     <GenreContainer>
                       {anime.genres.map((genre) => (
-                        <Genre>{genre.name}</Genre>
+                        <Genre key={genre.mal_id}>{genre.name}</Genre>
                       ))}
                     </GenreContainer>
                     <Detail>Release Date: {anime.aired.string}</Detail>
