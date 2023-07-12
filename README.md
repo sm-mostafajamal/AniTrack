@@ -1,1 +1,1 @@
-mal_id, aired, broadcast,demographics,favorites, genres,images, popularity,rank,score, title_english,title_japanese,trailer
+live link: https://ani-track.vercel.app/
