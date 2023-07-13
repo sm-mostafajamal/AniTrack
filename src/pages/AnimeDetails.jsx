@@ -4,12 +4,14 @@ import Navbar from "../components/Navbar";
 import { emptyAnimes, getSingleAnime } from "../redux/animeReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+
 import {
   FavoriteBorder,
   Podcasts,
   StarOutline,
   Timelapse,
 } from "@mui/icons-material";
+import axios from "axios";
 
 const Container = styled.div`
   background-color: black;
@@ -44,6 +46,11 @@ const Image = styled.img`
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+const Hr = styled.hr`
+  background-color: white;
+  width: 50%;
+  margin: 50px auto;
 `;
 
 const Title = styled.h1`
@@ -94,9 +101,29 @@ const Detail = styled.div`
 `;
 
 const Synopsis = styled.div``;
-const Bottom = styled.div``;
+const Bottom = styled.div`
+  width: 80%;
+  padding: 30px;
+  display: flex;
+`;
 const Left = styled.div``;
-const SideContainer = styled.div``;
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #aabfd7;
+  letter-spacing: 1px;
+`;
+const Data = styled.span`
+  font-weight: 300;
+  color: #aab0b6;
+  font-size: 13px;
+`;
+
+const SideContainer = styled.div`
+  width: 20%;
+`;
 const Right = styled.div``;
 const Trailer = styled.div``;
 
@@ -109,6 +136,7 @@ const AnimeDetails = () => {
     dispatch(getSingleAnime(`anime/${animeId}/full`));
   }, [dispatch, animeId]);
 
+  console.log(anime);
   return (
     <Container>
       <Navbar />
@@ -169,27 +197,64 @@ const AnimeDetails = () => {
                       {anime.favorites} Favorites
                     </Detail>
                   </Details>
+                  <Details>
+                    <Detail> Synopsis</Detail>
+                    <Synopsis>{anime.synopsis}</Synopsis>
+                  </Details>
                 </TitleContainer>
               </Top>
             </TopWrapper>
-            {/* <Synopsis>{anime.synopsis}</Synopsis> */}
           </TopContainer>
-          {/* <Bottom>
-          <Left>
-            <SideContainer>
-              <Detail>Background</Detail>
-              <Detail>episodes</Detail>
-              <Detail>streaming</Detail>
-              <Detail>studios</Detail>
-              <Detail>year released</Detail>
-              <Detail>type</Detail>
-              <Detail>season</Detail>
-            </SideContainer>
-          </Left>
-          <Right>
-            <Trailer></Trailer>
-          </Right>
-        </Bottom> */}
+          <Hr />
+          <Bottom>
+            <Left>
+              <SideContainer>
+                <Column>
+                  Background: <Data>{anime.background}</Data>
+                </Column>
+                <Column>
+                  Episodes: <Data>{anime.episodes}</Data>
+                </Column>
+                <Column>
+                  Streaming:
+                  {anime.streaming.map((s) => (
+                    <Data>{s.name}</Data>
+                  ))}
+                </Column>
+                <Column>
+                  Producers:
+                  {anime.producers.map((p) => (
+                    <Data>{p.name}</Data>
+                  ))}
+                </Column>
+                <Column>
+                  Studios:
+                  {anime.studios.map((s) => (
+                    <Data>{s.name}</Data>
+                  ))}
+                </Column>
+                <Column>
+                  Season: <Data>{anime.season}</Data>
+                </Column>
+                <Column>
+                  Released in: <Data>{anime.year}</Data>
+                </Column>
+              </SideContainer>
+            </Left>
+            <Right>
+              <Trailer>
+                {/* <YouTube videoId="IEDEtZ4UVtI" /> */}
+                <iframe
+                  width="853"
+                  height="480"
+                  src={`https://www.youtube.com/embed/${anime.trailer.youtube_id}?origin=https://ani-track.vercel.app&showinfo=0&video-id=${anime.trailer.youtube_id}&enablejsapi=1&widgetid=1&color=white&modestbranding=1&rel=0`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Embedded youtube"
+                />
+              </Trailer>
+            </Right>
+          </Bottom>
         </Wrapper>
       ) : (
         <span>Loading...</span>
