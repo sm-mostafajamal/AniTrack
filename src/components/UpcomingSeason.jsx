@@ -117,7 +117,7 @@ const UpcomingSeason = () => {
             <Loading />
           ) : (
             <SliderContainer slideindex={slideIndex}>
-              {animes.animeLists.upcoming.map((anime, id) => (
+              {animes.animeLists.upcoming.map((anime) => (
                 <Slider key={anime.mal_id}>
                   <AnimeImageContainer>
                     <Image src={anime.images.jpg.large_image_url} />

@@ -6,7 +6,7 @@ const initialState = {
     allAnimes: [],
     upcoming: [],
     top: [],
-    anime: [],
+    anime: {},
   },
   hasPage: null,
   isLoading: true,

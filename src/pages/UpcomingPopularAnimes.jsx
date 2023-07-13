@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { filterUpcomingAnime } from "../redux/filterReducer";
 import { emptyAnimes } from "../redux/animeReducer";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   background-color: black;
@@ -36,7 +37,10 @@ const Wrapper = styled.div`
   justify-content: space-evenly;
   padding: 20px;
 `;
-const AnimeWrapper = styled.div``;
+const AnimeLink = styled(Link)`
+  text-decoration: none;
+  width: 15%;
+`;
 
 const UpcomingPopularAnimes = ({ setPage }) => {
   const animes = useSelector(({ anime }) => anime);
@@ -86,11 +90,17 @@ const UpcomingPopularAnimes = ({ setPage }) => {
       <Wrapper>
         {animes.animeLists.upcoming.map((anime, index) =>
           animes.animeLists.upcoming.length === index + 1 ? (
-            <AnimeWrapper key={anime.mal_id} ref={lastElement}>
+            <AnimeLink
+              to={`/anime/${anime.mal_id}`}
+              key={anime.mal_id}
+              ref={lastElement}
+            >
               <Anime anime={anime} />
-            </AnimeWrapper>
+            </AnimeLink>
           ) : (
-            <Anime key={anime.mal_id} anime={anime} />
+            <AnimeLink to={`/anime/${anime.mal_id}`} key={anime.mal_id}>
+              <Anime key={anime.mal_id} anime={anime} />
+            </AnimeLink>
           )
         )}
       </Wrapper>

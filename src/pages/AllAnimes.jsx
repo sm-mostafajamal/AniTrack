@@ -37,7 +37,6 @@ const Wrapper = styled.div`
   justify-content: space-evenly;
   padding: 20px;
 `;
-const AnimeWrapper = styled.div``;
 const AnimeLink = styled(Link)`
   text-decoration: none;
   width: 15%;

@@ -14,6 +14,7 @@ const Container = styled.div`
 `;
 const Wrapper = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -29,7 +30,6 @@ const ImageContainer = styled.div`
 `;
 const Title = styled.span`
   width: 100%;
-
   font-size: 13px;
   font-weight: 500;
   color: #c3cdd5;
