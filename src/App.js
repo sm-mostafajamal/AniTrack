@@ -12,6 +12,7 @@ function App() {
   const [page, setPage] = useState({ pageName: "home", num: 1 });
   const dispatch = useDispatch();
   const filtersData = useSelector(({ filter }) => filter);
+
   useEffect(() => {
     for (const filterData in filtersData) {
       if (
@@ -29,6 +30,7 @@ function App() {
         );
       }
     }
+    return;
   }, [dispatch, filtersData, page]);
 
   return (
